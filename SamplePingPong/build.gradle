@@ -1,0 +1,25 @@
+apply plugin: 'application'
+
+dependencies {
+    compile 'com.netflix.karyon:karyon2-admin-web:2.7.1'
+    compile 'com.netflix.karyon:karyon2-jersey-blocking:2.7.1'
+    compile 'com.netflix.karyon:karyon2-archaius:2.7.1'
+}
+
+repositories {
+    jcenter()
+}
+
+task runSamplePingPongApplication(dependsOn: [classes], type: JavaExec) {
+    group = "Examples"
+    description = "Run Sample Ping Pong Application"
+
+    main = "netflix.karyon.KaryonRunner"
+    classpath = sourceSets.main.runtimeClasspath
+
+    jvmArgs "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005"
+    systemProperty 'java.awt.headless', 'true'
+    systemProperty 'archaius.deployment.environment', 'dev'
+
+    args = ["com.pingpong.module.BootstrapInjectionModule"]
+}
